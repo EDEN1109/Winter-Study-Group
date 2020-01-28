@@ -18,7 +18,7 @@ string findNAME(string logs)
 	return logs.substr(logs.find(" ", logs.find(" ") + 1) + 1);
 }
 
-vector<string> printEnterAndLeave(vector<string> record, unordered_map<string, string> nikname)
+vector<string> printEnterAndLeave(vector<string> record, unordered_map<string, string> nickname)
 {
 	vector<string> result;
 
@@ -26,11 +26,11 @@ vector<string> printEnterAndLeave(vector<string> record, unordered_map<string, s
 	{
 		if (record[i].find("Enter") == 0)
 		{
-			result.push_back(nikname.at(findUID(record[i])) + "´ÔÀÌ µé¾î¿Ô½À´Ï´Ù.");
+			result.push_back(nickname[findUID(record[i])] + "´ÔÀÌ µé¾î¿Ô½À´Ï´Ù.");
 		}
 		else if (record[i].find("Leave") == 0)
 		{
-			result.push_back(nikname.at(findUID(record[i])) + "´ÔÀÌ ³ª°¬½À´Ï´Ù.");
+			result.push_back(nickname[findUID(record[i])] + "´ÔÀÌ ³ª°¬½À´Ï´Ù.");
 		}
 	}
 	/*
@@ -48,17 +48,9 @@ unordered_map<string, string> makeChange(vector<string> record)
 
 	for (int i = 0; i < record.size(); i++)
 	{
-		if (record[i].find("Enter") == 0)
+		if (record[i].find("Enter") == 0 || record[i].find("Change") == 0)
 		{
-			if (result.find(findUID(record[i])) == result.end())
-				result.insert(make_pair(findUID(record[i]), findNAME(record[i])));
-			else
-				result.at(findUID(record[i])) = findNAME(record[i]);
-		}
-		else if (record[i].find("Change") == 0)
-		{
-			if (result.find(findUID(record[i])) != result.end())
-				result.at(findUID(record[i])) = findNAME(record[i]);
+			result[findUID(record[i])] = findNAME(record[i]);
 		}
 	}
 	/*
@@ -71,10 +63,10 @@ unordered_map<string, string> makeChange(vector<string> record)
 
 vector<string> solution(vector<string> record) {
 	vector<string> answer;
-	unordered_map<string, string> nikname;
+	unordered_map<string, string> nickname;
 
-	nikname = makeChange(record);
-	answer = printEnterAndLeave(record, nikname);
+	nickname = makeChange(record);
+	answer = printEnterAndLeave(record, nickname);
 
 	return answer;
 }
